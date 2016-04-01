@@ -6,19 +6,19 @@ minutes: 30
 ---
 > ## Learning Objectives {.objectives}
 >
-> *   Explain what a for loop does.
-> *   Correctly write for loops to repeat simple calculations.
-> *   Trace changes to a loop variable as the loop runs.
-> *   Trace changes to other variables as they are updated by a for loop.
+> *   Understand the fundamentals of web services.
+> *   Access and read function documentation.
+> *   Use optional arguments in function calls.
+> *   Import data into Pandas from a URL.
 
 
 In the previous chapter, we developed a short script for loading some pre-processed streamgage data into Python using the Pandas library, converting some columns into the correct format, plotting the data, and saving the figures to files.
 
-Our goal is to create a fully automated workflow that can produce plots for multiple stations without requiring any hand processing of the data. In this chapter, we are going to replace the initial import step in our previous code. Instead, we are going to request the data directly through the USGS web services with a short script.
+Our goal is to create a fully automated workflow that can produce plots for multiple stations without requiring any hand processing of the data. In this lesson, we are going to replace the way we brought the file into the DataFrame with a short script that requests the data directly through the USGS web services.
 
-Web services are automated tools for transfering data directly from machine to machine. Effectively, the code we write will ask a server for some data, and that server will hand it back to your code. The way that these commands and data are transferred is through an API (Application Programming Interface), which is essertially a set of functions and protocols for that interaction. We don't actually need to understand in detail what any of that means to use it, though - help pages are our friend!
+Web services are automated tools for transfering data directly from machine to machine. Effectively, the code we write will ask a server for some data and that server will hand the data back to the code. The way that these commands and data are transferred is through an API (Application Programming Interface), which is a set of functions and protocols for that interaction. We don't actually need to understand in detail what any of that means to use web services, though - help pages are our friend!
 
-Let's start by request data from the streamgage station at Lee's Ferry. We'll make a variable with the station number (which I looked up):
+We will start by requesting data for the streamgage station at Lee's Ferry. Let's make a variable with the station number (which I looked up):
 
 
 ~~~ {.python}
@@ -31,7 +31,7 @@ station = 09380000
 SyntaxError: invalid token
 ~~~
 
-An integer cannot start with a zero, so Python doesn't know what we mean and produces a Syntax Error. Let's rewrite the station number as a string by putting it in quotes (single or double both work):
+Because an integer cannot start with a zero, Python doesn't understand what we mean and produces a Syntax Error. Let's rewrite the station number as a string by putting it in quotes (single or double both work):
 
 ~~~ {.python}
 station = '09380000'
@@ -44,24 +44,23 @@ start_date = '2016-01-01'
 end_date = '2016-01-10'
 ~~~
 
-Data is accesed through APIs using URLs that contain the different pieces of information that the server needs to identify the data that we need. The USGS has a nifty little tool for helping us compose the URL:
+Data is accesed through APIs using URLs that include the different pieces of information that the server needs to identify the data that we want. The USGS has a nifty little tool for helping us compose the URL:
 
-http://waterservices.usgs.gov/rest/IV-Test-Tool.html
+[http://waterservices.usgs.gov/rest/IV-Test-Tool.html](http://waterservices.usgs.gov/rest/IV-Test-Tool.html)
 
-Let's use that tool to create the URL for the data we want:
+We can use that tool to create the URL for the data we want:
 
-http://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=09380000&startDT=2016-01-01&endDT=2016-01-10&parameterCd=00060,00065
+[http://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=09380000&startDT=2016-01-01&endDT=2016-01-10&parameterCd=00060,00065](http://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=09380000&startDT=2016-01-01&endDT=2016-01-10&parameterCd=00060,00065)
 
-If we go to that URL, we could just download that file and process it manually. We don't want to do that.
+We could just go to that URL, download the file and process it manually, but we don't want to do that.
 
-Let's start by making a variable `url` for the URL of the data we want:
+Let's create a variable `url` for the URL of the data we want to request:
 
 ~~~ {.python}
 url = 'http://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=09380000&startDT=2016-01-01&endDT=2016-01-10&parameterCd=00060,00065'
 ~~~
-~~~ {.output}
-We previously used the Pandas method `read_csv` to load a comma-delimited file into Python. That method can also receive a URL as the address to the file:
-~~~
+
+We previously used the Pandas function `read_csv` to load a comma-delimited file into Python. That function can also receive a URL as the address to the file:
 
 ~~~ {.python}
 import pandas as pd
@@ -129,9 +128,9 @@ pandas/parser.pyx in pandas.parser.raise_parser_error (pandas/parser.c:22649)()
 CParserError: Error tokenizing data. C error: Expected 1 fields in line 12, saw 2
 ~~~
 
-Pandas is unhappy and cannot load our file. The parser, a script responsible for converting the text in the file into a data structure inside Python, expects one line of column titles and then data with the same number of columns. Open the URL in a separate tab in your web browser and examine the file. The header is making it appear like the number of columns is charging part way through the file.
+Pandas is unhappy and cannot load our file. The parser, a script responsible for converting the text in the file into a data structure inside Python, expects one line of column titles and then data with the same number of columns. Open the URL in a separate tab in your web browser and examine the file. The long header is making it appear like the number of columns is charging part way through the file. We need to remove the header so the file can import correctly.
 
-The most widely used libraries in Python are very well documented. The help file for the specific function we are trying to use will contain information about the options that might let us read the file while ignoring the header:
+The most widely used libraries in Python are very well documented. The help file for the specific function we are using will contain information about the options it has for importing a file:
 
 
 ~~~ {.python}
@@ -312,10 +311,15 @@ A way to see the documentation as a separate window within an iPython notebook i
 pd.read_csv?
 ~~~
 
-The function `read_csv` requires the first parameter (a filepath) and accepts many optional parameters (if not set, they use a default value). For example, `sep=','` is an optional function parameter that defines the column separator. By default, it's a comma.
+Near the top of the documentation is the function definition. It looks like this:
 
-Let's try loading our file again. Because the columns in our file are separated by tabs, we need to set the `sep` parameter. To remove the header, we will also tell Pandas that lines that start with `#` are comments and it should not import them.
+~~~{.python}
+    read_csv(filepath_or_buffer, sep=',', dialect=None, compression='infer', doublequote=True, escapechar=None, quotechar='"', quoting=0, skipinitialspace=False, lineterminator=None, header='infer', index_col=None, names=None, prefix=None, skiprows=None, skipfooter=None, skip_footer=0, na_values=None, true_values=None, false_values=None, delimiter=None, converters=None, dtype=None, usecols=None, engine=None, delim_whitespace=False, as_recarray=False, na_filter=True, compact_ints=False, use_unsigned=False, low_memory=True, buffer_lines=None, warn_bad_lines=True, error_bad_lines=True, keep_default_na=True, thousands=None, comment=None, decimal='.', parse_dates=False, keep_date_col=False, dayfirst=False, date_parser=None, memory_map=False, float_precision=None, nrows=None, iterator=False, chunksize=None, verbose=False, encoding=None, squeeze=False, mangle_dupe_cols=True, tupleize_cols=False, infer_datetime_format=False, skip_blank_lines=True)
+~~~
 
+The function name is `read_csv` and everything in parentheses are the function parameters. The first one, `filepath_or_buffer` doesn't have a default value and is required. All of the other ones are optional and will take their default value (set with the equal sign) if they are not defined when the function is called. For example, `sep=','` is an optional function parameter that defines the column separator. By default, it's a comma.
+
+After reading through the documentation, we figured out that, to remove the header, we need to tell Pandas that the separators are tabs and that lines that start with `#` are comments and it should not import them.
 
 ~~~ {.python}
 data = pd.read_csv(url, sep='\t', comment='#')
@@ -398,7 +402,7 @@ data.head()
 </div>
 ~~~
 
-There's our file! Pandas read the first row of the file as the column headers and everything below that as data, but row 0 doesn't belong. We can tell the function `read_csv` to use the second row of the file as the column headers and ignore the first row so at least our data is imported correctly:
+There's our file! Pandas read the first row of the file as the column headers and everything below that as data. Row 0, though, doesn't belong with the data. We can tell the function `read_csv` to use the second row of the file as the column headers and ignore the first row so at least our data is imported correctly (remember it starts counting at zero!):
 
 ~~~ {.python}
 data = pd.read_csv(url, header=1, sep='\t', comment='#')
@@ -481,12 +485,12 @@ data.head()
 </div>
 ~~~
 
-Of course, the column headers are now wrong! We were planning to rename them, so let's just do that during import:
+The column headers are now wrong but we were planning to rename them anyway, so let's just do that during import:
 
 ~~~ {.python}
 new_column_names = ['Agency', 'Station', 'OldDateTime', 'Timezone', 'Discharge_cfs', 'Discharge_stat', 'Stage_ft', 'Stage_stat']
 
-data = pd.read_csv(url, header=1, sep='\t', comment='#', names = new_column_names)
+data = pd.read_csv(url, header=1, sep='\t', comment='#', names=new_column_names)
 data.head()
 ~~~
 ~~~ {.output}
@@ -571,11 +575,11 @@ data.head()
 > 
 > In the previous lesson, we saw we could create new DataFrames that contained just a subset of the rows of an existing DataFrame. Why did we go through so much trouble to avoid importing the "bad" row in with the data?
 > 
-> One consideration is memory space and speed. If we had simply copied the good rows into a new DataFrame, Python would have created a new copy of the data, occupying available memory and taking some time. While the extra computational expenses are negligible for these small datasets, they quickly add up! By fixing those issues as we are importing the data, we create only one copy of the DataFrame from the start.
+> One consideration is memory space and computational speed. If we had simply copied the good rows into a new DataFrame, Python would have created a new copy of the data, occupying available memory and taking some time. While the extra computational expenses are negligible for these small datasets, they quickly add up. By fixing the little issues as we are importing the data, we create only one copy of the DataFrame from the start.
 > 
 > The second concern is less obvious but could potentially complicate how we handle the data later on. Each column in the DataFrame has a data type that restricts what can be done with the data (check them with `data.dtypes`). Columns of the type `object`, for example, contain strings and cannot be used in mathematical expressions. When the "bad" row was included in the data, the first entry in the columns for stage and discharge were "14n", forcing Pandas to consider every entry in those columns to be a string instead of an integer or float.
 
-Our script can now import data through the USGS web services in a format that we can use with our existing code! Let's combine these commands with the code we wrote in the previous lesson. We can copy the old code, comment out (with the symbol #) any rows that we don't want to use, and add our new commands:
+Our script can now import data through the USGS web services in a format that we can use. Let's combine these new commands with the code we wrote in the previous lesson. We can copy the old code, remove any lines that we no longer need, and add the new commands in their place:
 
 ~~~ {.python}
 import pandas as pd
@@ -585,7 +589,6 @@ import matplotlib.pyplot as plt
 # data = pd.read_csv('data/streamgage.csv')
 
 new_column_names = ['Agency', 'Station', 'OldDateTime', 'Timezone', 'Discharge_cfs', 'Discharge_stat', 'Stage_ft', 'Stage_stat']
-# data.columns = new_column_names
 
 url = 'http://waterservices.usgs.gov/nwis/iv/?format=rdb&sites=09380000&startDT=2016-01-01&endDT=2016-01-10&parameterCd=00060,00065'
 data = pd.read_csv(url, header=1, sep='\t', comment='#', names = new_column_names)

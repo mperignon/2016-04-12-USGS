@@ -6,10 +6,10 @@ minutes: 30
 ---
 > ## Learning Objectives {.objectives}
 >
-> *   Explain what a for loop does.
-> *   Correctly write for loops to repeat simple calculations.
-> *   Trace changes to a loop variable as the loop runs.
-> *   Trace changes to other variables as they are updated by a for loop.
+> *   Load data using the Pandas library.
+> *   Access data in DataFrames.
+> *   Create plots of data in DataFrames.
+> *   Save figures to file.
 
 
 By now you have all written some Python code that works so we are going to jump into doing some science tasks with data pulled directly from real sources instead of using a dataset we cleaned for you.
