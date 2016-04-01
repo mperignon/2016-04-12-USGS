@@ -652,9 +652,7 @@ matplotlib.pyplot.show(ave_plot)
 ![Average Temperature Over Time](fig/01-numpy-avg_temp.png)
 
 It's interesting to examine how the temperature trends vary between stations throughout the year. 
-We can make four different line plots that show the data from each of the stations separately.
-
-To summarize what we've learned so far, let's write every command we need to import the data and create the plots:
+We can make four different line plots that show the data from each of the stations separately. To summarize what we've learned so far, let's write every command we need to import the data and create the plots:
 
 ~~~{.python}
 import numpy as np

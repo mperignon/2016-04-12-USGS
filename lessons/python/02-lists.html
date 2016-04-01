@@ -41,8 +41,8 @@
 </ul>
 </div>
 </section>
-<p>In the first lesson we used Numpy arrays to manipulate temperature data. Numpy arrays are not built into Python; we had to import the library <code>numpy</code> in order to be able to use them. These data structures are the most useful for scientific computing because the allow us to easily do math on our data. For anyone who’s programmed in Matlab or C before, these are also the most familiar data structure (which is why we introduce them first!).</p>
-<p>One of the built-in data structures that you will definitely use extensively in Python is the list. Because they are built in, we don’t need to load a library to use them. A list is exactly what it sounds like – a sequence of things that don’t all have to be the same type. Lists are ordered, so we can access the items through an integer index (like we did with Numpy arrays), and one list can simultaneously contain numbers, strings, other lists, numpy arrays, and even commands to run.</p>
+<p>In the first lesson we used NumPy arrays to manipulate temperature data. NumPy arrays are not built into Python: we had to import the library <code>numpy</code> in order to be able to use them. These data structures are the most useful for scientific computing because the allow us to easily do math on our data. For anyone who’s programmed in Matlab or C before, these are also the most familiar data structure (which is why we introduce them first!).</p>
+<p>One of the built-in data structures that you will definitely use extensively in Python is the list. Because they are built in, we don’t need to load a library to use them. A list is exactly what it sounds like – a sequence of things that don’t all have to be the same type. Lists are ordered, so we can access the items through an integer index (like we did with NumPy arrays), and one list can simultaneously contain numbers, strings, other lists, numpy arrays, and even commands to run.</p>
 <p>Lists are created by putting values, separated by commas, inside square brackets:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">odds <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>]
 <span class="bu">print</span> <span class="st">&#39;odds are:&#39;</span>, odds</code></pre></div>
@@ -50,7 +50,11 @@
 <p>Because they are ordered, we can select individual elements from lists by indexing:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span> <span class="st">&#39;first and last:&#39;</span>, odds[<span class="dv">0</span>], odds[<span class="op">-</span><span class="dv">1</span>]</code></pre></div>
 <pre class="output"><code>first and last: 1 7</code></pre>
-<h2 id="negative-indices" class="callout">Negative indices?!</h2>
+<aside class="callout panel panel-info">
+<div class="panel-heading">
+<h2 id="negative-indices"><span class="glyphicon glyphicon-pushpin"></span>Negative indices?!</h2>
+</div>
+<div class="panel-body">
 <p>One wonderful feature of sequences in Python is that they allow for indexing with respect to the end of the sequence by using negative values. An index of -1 refer to the last item in a list, -2 is the second to last, and so on. Try it out!</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">text <span class="op">=</span> <span class="st">&quot;The quick brown fox jumped over the lazy dog.&quot;</span>
 
@@ -62,34 +66,36 @@
 dog
 dog.
 the lazy dog</code></pre>
-<p>We can assign new values to individual elements in a list:</p>
+</div>
+</aside>
+<p>We can change individual elements in a list by assigning new values to them:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">odds[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="dv">9</span>
 <span class="bu">print</span> <span class="st">&#39;odds are now:&#39;</span>, odds</code></pre></div>
 <pre class="output"><code>odds are now: [1, 3, 5, 9]</code></pre>
-<p>There are many ways to change the contents of lists besides assigning new values to individual elements:</p>
+<p>There are many other ways to change the contents of lists besides assigning new values to individual elements:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">odds.append(<span class="dv">11</span>)
-<span class="bu">print</span> <span class="st">&#39;odds after adding a value:&#39;</span>, odds</code></pre></div>
-<pre class="output"><code>odds after adding a value: [1, 3, 5, 9, 11]</code></pre>
+<span class="bu">print</span> <span class="st">&#39;odds after appending a value:&#39;</span>, odds</code></pre></div>
+<pre class="output"><code>odds after appending a value: [1, 3, 5, 9, 11]</code></pre>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">del</span> odds[<span class="dv">0</span>]
 <span class="bu">print</span> <span class="st">&#39;odds after removing the first element:&#39;</span>, odds</code></pre></div>
 <pre class="output"><code>odds after removing the first element: [3, 5, 9, 11]</code></pre>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">odds.reverse()
 <span class="bu">print</span> <span class="st">&#39;odds after reversing:&#39;</span>, odds</code></pre></div>
 <pre class="output"><code>odds after reversing: [11, 9, 5, 3]</code></pre>
-<p>There is one important difference between lists and strings: we can change the values in a list, but we cannot change the characters in a string. For example:</p>
+<p>There is one important difference between lists and strings: we can change the values in a list, but we cannot change the characters in a string.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">names <span class="op">=</span> [<span class="st">&#39;Newton&#39;</span>, <span class="st">&#39;Darwing&#39;</span>, <span class="st">&#39;Turing&#39;</span>] <span class="co"># typo in Darwin&#39;s name</span>
 <span class="bu">print</span> <span class="st">&#39;names is originally:&#39;</span>, names
 names[<span class="dv">1</span>] <span class="op">=</span> <span class="st">&#39;Darwin&#39;</span> <span class="co"># correct the name</span>
 <span class="bu">print</span> <span class="st">&#39;final value of names:&#39;</span>, names</code></pre></div>
 <pre class="output"><code>names is originally: [&#39;Newton&#39;, &#39;Darwing&#39;, &#39;Turing&#39;]
 final value of names: [&#39;Newton&#39;, &#39;Darwin&#39;, &#39;Turing&#39;]</code></pre>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">name <span class="op">=</span> <span class="st">&#39;Bell&#39;</span>
-name[<span class="dv">0</span>] <span class="op">=</span> <span class="st">&#39;b&#39;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">name <span class="op">=</span> <span class="st">&#39;Tell&#39;</span>
+name[<span class="dv">0</span>] <span class="op">=</span> <span class="st">&#39;B&#39;</span></code></pre></div>
 <pre class="error"><code>---------------------------------------------------------------------------
 TypeError                                 Traceback (most recent call last)
 &lt;ipython-input-15-220df48aeb2e&gt; in &lt;module&gt;()
-      1 name = &#39;Bell&#39;
-----&gt; 2 name[0] = &#39;b&#39;
+      1 name = &#39;Tell&#39;
+----&gt; 2 name[0] = &#39;B&#39;
 
 TypeError: &#39;str&#39; object does not support item assignment</code></pre>
 <aside class="callout panel panel-info">
@@ -97,27 +103,64 @@ TypeError: &#39;str&#39; object does not support item assignment</code></pre>
 <h2 id="ch-ch-ch-changes"><span class="glyphicon glyphicon-pushpin"></span>Ch-Ch-Ch-Changes</h2>
 </div>
 <div class="panel-body">
-<p>Data which can be modified in place is called mutable, while data which cannot be modified is called immutable. Strings and numbers are immutable. This does not mean that variables with string or number values are constants, but when we want to change the value of a string or number variable, we can only replace the old value with a completely new value.</p>
-<p>Lists and Numpy arrays, on the other hand, are mutable: we can modify them after they have been created. We can change individual elements, append new elements, or reorder the whole list. For some operations, like sorting, we can choose whether to use a function that modifies the data in place or a function that returns a modified copy and leaves the original unchanged.</p>
-<p>Be careful when modifying data in place. If two variables refer to the same list, and you modify the list value, it will change for both variables! If you want variables with mutable values to be independent, you must make a copy of the value when you assign it.</p>
-<p>Because of pitfalls like this, code which modifies data in place can be more difficult to understand. However, it is often far more efficient to modify a large data structure in place than to create a modified copy for every small change. You should consider both of these aspects when writing your code.</p>
+<p>Data which can be modified in place is called mutable, while data which cannot be modified is called immutable. Strings and numbers are immutable. This does not mean that variable names assigned to string or number objects are forever going to be assigned to those objects, but when we want to change the value of a string or number object, we can only replace the old value with a completely new value.</p>
+<p>Lists and NumPy arrays, on the other hand, are mutable: we can modify them after they have been created. We can change individual elements, append new elements, or reorder the whole list. For some operations, like sorting, we can choose whether to use a function that modifies the data in place or a function that returns a modified copy and leaves the original unchanged.</p>
+<p>Be careful when modifying data in place. If two variables refer to the same list and you modify a value in the list, it will change for both variables! If you want variables with mutable values to be independent, you must make a copy of the value when you assign it.</p>
+<p>Because of pitfalls like this, code that modifies data in place can be more difficult to understand (and therefore to debug). However, it is often far more efficient to modify a large data structure in place than to create a modified copy for every small change. You should consider both of these aspects when writing your code.</p>
 </div>
 </aside>
-<p>If we make a list and (attempt to) copy it then modify in place, we can cause all sorts of trouble:</p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">odds <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>]
+<p>If we make a list, (attempt to) copy it and then modify in place, we can cause all sorts of trouble:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span> <span class="st">&#39;Before:</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dv">10</span> <span class="op">*</span> <span class="st">&#39;-&#39;</span>
+
+odds <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>]
 primes <span class="op">=</span> odds
+
+<span class="bu">print</span> <span class="st">&#39;primes:&#39;</span>, primes
+<span class="bu">print</span> <span class="st">&#39;odds:&#39;</span>, odds
+
+
+<span class="bu">print</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">After:</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dv">10</span> <span class="op">*</span> <span class="st">&#39;-&#39;</span>
+
 primes <span class="op">+=</span> [<span class="dv">2</span>]
+
 <span class="bu">print</span> <span class="st">&#39;primes:&#39;</span>, primes
 <span class="bu">print</span> <span class="st">&#39;odds:&#39;</span>, odds</code></pre></div>
-<pre class="output"><code>primes: [1, 3, 5, 7, 2]
+<pre class="output"><code>
+Before:
+----------
+primes: [1, 3, 5, 7]
+odds: [1, 3, 5, 7]
+
+After:
+----------
+primes: [1, 3, 5, 7, 2]
 odds: [1, 3, 5, 7, 2]</code></pre>
-<p>This is because python stores a list in memory, and then can use multiple names to refer to the same list. If all we want to do is copy a (simple) list, we can use the list() command, so we do not modify a list we did not mean to:</p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">odds <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>]
+<p>The command <code>primes = odds</code> doesn’t create a new copy of the list that the variable name <code>odds</code> is assigned to but instead assigns a second variable name to the same list. Essentially, the two variable names point to the exact same location in memory.</p>
+<p>Since lists in Python can be modified in place (lists are mutable objects), changing the value of <code>primes</code> edits the contents of the part of memory that both <code>primes</code> and <code>odds</code> point to, causing the value of both variables to change.</p>
+<p>To make a copy of a list that is independent of the original, we use the <code>list()</code> command:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span> <span class="st">&#39;Before:</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dv">10</span> <span class="op">*</span> <span class="st">&#39;-&#39;</span>
+
+odds <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>]
 primes <span class="op">=</span> <span class="bu">list</span>(odds)
+
+<span class="bu">print</span> <span class="st">&#39;primes:&#39;</span>, primes
+<span class="bu">print</span> <span class="st">&#39;odds:&#39;</span>, odds
+
+
+<span class="bu">print</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">After:</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dv">10</span> <span class="op">*</span> <span class="st">&#39;-&#39;</span>
+
 primes <span class="op">+=</span> [<span class="dv">2</span>]
+
 <span class="bu">print</span> <span class="st">&#39;primes:&#39;</span>, primes
 <span class="bu">print</span> <span class="st">&#39;odds:&#39;</span>, odds</code></pre></div>
-<pre class="output"><code>primes: [1, 3, 5, 7, 2]
+<pre class="output"><code>Before:
+----------
+primes: [1, 3, 5, 7]
+odds: [1, 3, 5, 7]
+
+After:
+----------
+primes: [1, 3, 5, 7, 2]
 odds: [1, 3, 5, 7]</code></pre>
         </div>
       </div>
