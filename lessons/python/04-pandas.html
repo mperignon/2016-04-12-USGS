@@ -41,18 +41,19 @@
 </ul>
 </div>
 </section>
-<p>Since by now you have all written some Python code that works, we are going to jump directly into doing some science tasks with data pulled directly from real sources, instead of using a dataset we cleaned for you.</p>
+<p>By now you have all written some Python code that works so we are going to jump into doing some science tasks with data pulled directly from real sources instead of using a dataset we cleaned for you.</p>
 <p>Some of the stuff we are going to do will be fairly advanced but I think that seeing how the language can automate your workflow - and especially how it can handle the tasks that are annoying or difficult - will make it more likely that you’ll come back to it. We are throwing a lot at you, so put a red sticky up if you need hands-on help and interrupt if you have a question, and we’ll adjust as we go.</p>
-<p>We are interested in the comparing the discharge over a specific time period at different points along the Colorado River. The traditional way to do this is through the USGS website:</p>
-<p>http://waterwatch.usgs.gov/?m=real&amp;r=az</p>
-<p>and then precisely selecting the station you want and going through the whole process by hand. At the end, you have end up with some csv files that look like this:</p>
-<p>http://waterdata.usgs.gov/az/nwis/uv?cb_00060=on&amp;cb_00065=on&amp;format=rdb&amp;site_no=09380000&amp;period=&amp;begin_date=2016-01-01&amp;end_date=2016-01-10</p>
-<p>The header is annoying because it doesn’t always have the same number of lines. Depending on the specific options we selected, the table has a different number of columns. Automating the analysis of these files is rough, and it requires quite a bit of handholding in Excel. If we were to do this frequently or for many stations, the chances of introducing an error are high.</p>
-<p>Instead of doing this by hand, we are going to automate the entire process of data import and processing using Python. We will write a script that will take two dates and a list of stations and will automatically create plots of the gage height and discharge for each of those stations.</p>
-<p>Earlier today we used a Python library called numpy to handle arrays of data. <code>numpy arrays</code> are matrices and are great for doing calculations on data, but they can only contain floats or integers. Tabular data are best handled by spreadsheets where entries such as dates and times are in some useful format.</p>
-<p>One of the best options for working with tabular data in Python is the Python Data Analysis Library (a.k.a. Pandas). The Pandas library provides data structures, produces high quality plots with matplotlib (the plotting library we used earlier) and integrates nicely with other libraries that can use numpy arrays.</p>
-<p>Let’s start by importing streamgage data from a file that has already been partially cleaned up. Open the file in a text editor and see: we removed the header and the column format line (“5d 15s…”), and saved it as a comma-delimited file instead of tab delimited.</p>
-<p>We will first import the Pandas library and give it the shortcut <code>pd</code> and use the Pandas function <code>read_csv</code> to import the file. This will pull the contents of the file into a DataFrame. Let’s assign it to a variable named <code>data</code> (so original!) and print the first 5 lines:</p>
+<h2 id="streamflow-measurements-of-the-colorado-river">Streamflow measurements of the Colorado River</h2>
+<p>We are interested in the comparing the discharge of the Colorado River at different points along its course over a specific time period. The traditional way to do this is through the USGS website:</p>
+<p><a href="http://waterwatch.usgs.gov/?m=real&amp;r=az" class="uri">http://waterwatch.usgs.gov/?m=real&amp;r=az</a></p>
+<p>There we can select, by hand, the specific stations we want and request the data for the period of interest. At the end, we end up with some csv files that look like this:</p>
+<p><a href="http://waterdata.usgs.gov/az/nwis/uv?cb_00060=on&amp;cb_00065=on&amp;format=rdb&amp;site_no=09380000&amp;period=&amp;begin_date=2016-01-01&amp;end_date=2016-01-10" class="uri">http://waterdata.usgs.gov/az/nwis/uv?cb_00060=on&amp;cb_00065=on&amp;format=rdb&amp;site_no=09380000&amp;period=&amp;begin_date=2016-01-01&amp;end_date=2016-01-10</a></p>
+<p>The header is difficult to work with because it doesn’t always have the same number of lines. Depending on the options we selected on the website, the table can have a different number of columns. Automating the analysis of these files is complicated and it requires quite a bit of handholding in Excel. If we had to do this frequently or for many stations, the chances that we would introduce an error into the data are high.</p>
+<p>Our goal is to automate the entire process of data import and processing using Python. We will write a script that will take two dates and a list of stations and will automatically create plots of the discharge at each of those stations.</p>
+<p>Earlier today we used a Python library called NumPy to handle arrays of data. NumPy arrays are great for doing math on data but they can only contain floats or integers. Tabular data are best handled by spreadsheets where entries such as dates and times are in some useful format.</p>
+<p>One of the best options for working with tabular data in Python is the Python Data Analysis Library (a.k.a. Pandas). The Pandas library provides data structures for tabular data, produces high quality plots with matplotlib (the plotting library we used earlier) and integrates nicely with other libraries that use NumPy arrays.</p>
+<p>Let’s start by importing streamgage data from a file that has already been partially cleaned. Open the file in a text editor and see: we removed the header and the column format line (“5d 15s…”) and saved it as a comma-delimited file instead of tab delimited.</p>
+<p>To load this file into Python, we first import the Pandas library and give it the shortcut <code>pd</code>. We can then use the Pandas function <code>read_csv</code> to import the file. This will pull the contents of the file into a DataFrame. Let’s assign it to a variable named <code>data</code> (so original!) and print the first 5 lines:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> pandas <span class="im">as</span> pd
 
 data <span class="op">=</span> pd.read_csv(<span class="st">&#39;data/streamgage.csv&#39;</span>)
@@ -136,15 +137,15 @@ data.head()</code></pre></div>
 <h2 id="whats-a-dataframe"><span class="glyphicon glyphicon-pushpin"></span>What’s a DataFrame?</h2>
 </div>
 <div class="panel-body">
-<p>A DataFrame is a 2-dimensional data structure that can store data of different types (including characters, integers, floating point values, factors and more) in columns. It is similar to a spreadsheet or an SQL table or the data.frame in R.</p>
-<p>Check the data type of <code>data</code> using the <code>type</code> method. The <code>type</code> method and <code>__class__</code> attribute tell us what type of object the variable points to. We will not discuss the full meaning of this terminology, related to object-oriented programming, in the workshop.</p>
+<p>A DataFrame is a 2-dimensional data structure that can store data of different types (including characters, integers, floating point values, factors and more) in columns. It is similar to a spreadsheet, a SQL table, or the data.frame in R.</p>
+<p>Check the type of the object <code>data</code> using the <code>type</code> module. The <code>type</code> module and <code>__class__</code> attribute tell us what type of object the variable points to. We will not discuss the full meaning of this terminology, related to object-oriented programming, in the workshop.</p>
 </div>
 </aside>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span> <span class="bu">type</span>(data)
 <span class="bu">print</span> data.__class__</code></pre></div>
 <pre class="output"><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
 &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</code></pre>
-<p>Each column in a DataFrame also has a type. We can use <code>data.dtypes</code> to view the data type for each column. <code>int64</code> represents numeric integer values - <code>int64</code> cells can not store decimals. <code>object</code> represents strings (letters and numbers). <code>float64</code> represents numbers with decimals.</p>
+<p>Each column in a DataFrame also has its own type. We can use <code>data.dtypes</code> to view the data type for each column. <code>int64</code> are numeric integer values - <code>int64</code> cells can not store decimals, <code>object</code> are strings (letters and numbers), and <code>float64</code> are numbers with decimals.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">data.dtypes</code></pre></div>
 <pre class="output"><code>agency_cd       object
 site_no          int64
@@ -294,15 +295,15 @@ data[<span class="st">&#39;Stage_m&#39;</span>].head()</code></pre></div>
 4    1.146048
 Name: Stage_m, dtype: float64</code></pre>
 <h2 id="fixing-the-station-name">Fixing the station name</h2>
-<p>When Pandas imported the data, it read the station name as an integer and removed the initial zero. We can fix the station name by replacing the values of that column.</p>
-<p>Remember that we are doing all of this so we can later automate the process for multiple stations. Instead of writing the corrected station name ourselves, let’s build it from the values available in the DataFrame:</p>
+<p>When Pandas imported the data, it read the station name (a number) as an integer and removed the initial zero. We can fix the station name by replacing the values of that column with a string.</p>
+<p>Remember that the goal is to automate the process for multiple stations. Instead of writing the corrected station name ourselves, let’s build it from the values available in the DataFrame:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">data[<span class="st">&#39;Station&#39;</span>].unique()</code></pre></div>
 <pre class="output"><code>array([9163500])</code></pre>
-<p>The Pandas method <code>unique</code> returns a <code>numpy</code> array of the unique elements in the DataFrame. We want the first (and only) entry to that array, which has the index 0. We can build a string with the correct station name by <strong>casting</strong> that integer as a string and concatenating with an initial zero:</p>
+<p>The Pandas method <code>unique</code> returns a <code>numpy</code> array of the unique elements in the DataFrame. We want the first (and only) entry in that array, which has the index 0. We can build a string with the correct station name by casting that value as a string and concatenating it with an initial zero:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">new_station_name <span class="op">=</span> <span class="st">&quot;0&quot;</span> <span class="op">+</span> <span class="bu">str</span>(data[<span class="st">&#39;Station&#39;</span>].unique()[<span class="dv">0</span>])
 <span class="bu">print</span> new_station_name</code></pre></div>
 <pre class="output"><code>09163500</code></pre>
-<p>We can replace all values in the ‘Station’ column with this string by assignment, and we can check the object type of each column to make sure it is no longer an integer:</p>
+<p>We can replace all values in the ‘Station’ column with this string through assignment and check the object type of each column to make sure it is no longer an integer:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">data[<span class="st">&#39;Station&#39;</span>] <span class="op">=</span> new_station_name
 data.head()</code></pre></div>
 <pre class="output"><code>&lt;div&gt;
@@ -487,8 +488,8 @@ data.head()</code></pre></div>
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/div&gt;</code></pre>
-<h2 id="data-subsets-and-removing-columns">Data subsets and removing columns</h2>
-<p>The entries in our DataFrame <code>data</code> are indexed by the number in <strong>bold</strong> on the left side of the row. We can display a slice of the data using index ranges:</p>
+<h2 id="creating-data-subsets-and-removing-columns">Creating data subsets and removing columns</h2>
+<p>The entries in our DataFrame <code>data</code> are indexed by the number in bold on the left side of each row. We can display a slice of the data using index ranges:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">data[<span class="dv">0</span>:<span class="dv">4</span>]</code></pre></div>
 <pre class="output"><code>&lt;div&gt;
 &lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
@@ -628,14 +629,14 @@ data.head()</code></pre></div>
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/div&gt;</code></pre>
-<p>The number of rows that these two commands return is different! The method <code>iloc</code> behaves like other sequences in Python, ignoring the end bound. With <code>loc</code>, however, the start and end bounds of the row indices are included. Compare them using the <code>shape</code> method:</p>
+<p>The number of rows that these two commands return is different. The method <code>iloc</code> behaves like slicing elsewhere in Python, ignoring the end bound. With <code>loc</code>, however, the start and end bounds of the row indices are included. Compare them using the <code>shape</code> method:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span> <span class="st">&#39;With iloc:&#39;</span>, data.iloc[<span class="dv">0</span>:<span class="dv">2</span>,<span class="op">-</span><span class="dv">2</span>:].shape
 <span class="bu">print</span> <span class="st">&#39;With loc:&#39;</span>, data.loc[<span class="dv">0</span>:<span class="dv">2</span>, [<span class="st">&#39;DateTime&#39;</span>, <span class="st">&#39;Stage_m&#39;</span>]].shape</code></pre></div>
 <pre class="output"><code>With iloc: (2, 2)
 With loc: (3, 2)</code></pre>
 </div>
 </aside>
-<p>Since we can call individual columns (or lists of columns) from a DataFrame, the simplest way to remove columns is by creating new DataFrames with only the columns we want:</p>
+<p>Since we can call individual columns (or lists of columns) from a DataFrame, the simplest way to remove columns is by creating a new DataFrame with only the columns we want:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">clean_data <span class="op">=</span> data[[<span class="st">&#39;Station&#39;</span>, <span class="st">&#39;DateTime&#39;</span>, <span class="st">&#39;Discharge_cfs&#39;</span>, <span class="st">&#39;Stage_ft&#39;</span>]]
 clean_data.head()</code></pre></div>
 <pre class="output"><code>&lt;div&gt;
@@ -689,7 +690,7 @@ clean_data.head()</code></pre></div>
 &lt;/table&gt;
 &lt;/div&gt;</code></pre>
 <h2 id="plotting-stage-and-discharge">Plotting stage and discharge</h2>
-<p>Pandas is well integrated with the <code>matplotlib</code> library that we used ealier in the tutorial. We can use the same functions we used before with <code>numpy</code> arrays, or we can use the plotting functions built into Pandas:</p>
+<p>Pandas is well integrated with the <code>matplotlib</code> library that we used ealier in the tutorial. We can either use the same functions we used before with to plot data in NumPy arrays or we can use the plotting functions built into Pandas:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt
 <span class="op">%</span>matplotlib inline
 
@@ -700,7 +701,7 @@ plt.title(<span class="st">&#39;Station &#39;</span> <span class="op">+</span> d
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">data.plot(x<span class="op">=</span><span class="st">&#39;DateTime&#39;</span>, y<span class="op">=</span><span class="st">&#39;Discharge_cfs&#39;</span>, title<span class="op">=</span><span class="st">&#39;Station &#39;</span> <span class="op">+</span> data[<span class="st">&#39;Station&#39;</span>][<span class="dv">0</span>])</code></pre></div>
 <pre class="output"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x109eec810&gt;
 ![png](fig/output_38_1.png)</code></pre>
-<p>We can use <code>pyplot</code> methods to customize the Pandas plot and save the figure:</p>
+<p>We can use <code>pyplot</code> commands to customize the Pandas plot and save the figure:</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">data.plot(x<span class="op">=</span><span class="st">&#39;DateTime&#39;</span>, y<span class="op">=</span><span class="st">&#39;Discharge_cfs&#39;</span>, title<span class="op">=</span><span class="st">&#39;Station &#39;</span> <span class="op">+</span> data[<span class="st">&#39;Station&#39;</span>][<span class="dv">0</span>])
 plt.xlabel(<span class="st">&#39;Time&#39;</span>)
 plt.ylabel(<span class="st">&#39;Discharge (cfs)&#39;</span>)
