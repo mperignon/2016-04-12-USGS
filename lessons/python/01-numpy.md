@@ -147,9 +147,9 @@ This is different from the way spreadsheets work, where changing the value of a 
 >
 >You might have noticed that we wrote the value assigned to `weight_kg` both
 >with and without a decimal point. From the perspective of a computer, these two numbers are objects of
->different type: integers and floating point numbers (or floats).
+>different [type](reference.html#type): integers and floating point numbers (or floats).
 >
->~~~{.python}
+>~~~ {.python}
 >weight_kg_int = 57
 >weight_kg_float = 57.0
 >
@@ -163,7 +163,7 @@ This is different from the way spreadsheets work, where changing the value of a 
 >
 >Addition, subtraction and multiplication work on both integers and floats as we’d expect, but division works differently. If we divide one integer by another, we get the quotient without the remainder:
 >
->~~~{.python}
+>~~~ {.python}
 >print weight_kg_int, '/ 2 is', weight_kg_int / 2
 >print weight_kg_float, '/ 2 is', weight_kg_float / 2
 >~~~
@@ -173,7 +173,8 @@ This is different from the way spreadsheets work, where changing the value of a 
 >~~~
 >
 >If either part of the division is a float, the computer creates a floating-point answer:
->~~~{.python}
+>
+>~~~ {.python}
 >print weight_kg_float, '/ 2 is', weight_kg_float / 2
 >print weight_kg_int, '/ 2.0 is', weight_kg_int / 2.0
 >~~~
@@ -184,7 +185,7 @@ This is different from the way spreadsheets work, where changing the value of a 
 >
 >To convert an object from one type to another, we can cast the variable as the new type:
 >
->~~~{.python}
+>~~~ {.python}
 >print 'float(', weight_kg_int, ') is', type(float(weight_kg_int))
 >print 'float(', weight_kg_int, ') / 2.0 is', float(weight_kg_int) / 2.0
 >~~~
