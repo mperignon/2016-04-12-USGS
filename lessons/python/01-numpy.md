@@ -146,11 +146,11 @@ This is different from the way spreadsheets work, where changing the value of a 
 >## Integers and floats {.callout}
 >
 >You might have noticed that we wrote the value assigned to `weight_kg` both
-> with and without a decimal point. From the perspective of a computer, these two numbers are objects of
-> different [type](reference.html#type: integers and floating point numbers (or floats).
+>with and without a decimal point. From the perspective of a computer, these two numbers are objects of
+>different type: integers and floating point numbers (or floats).
 >
 >~~~{.python}
-> weight_kg_int = 57
+>weight_kg_int = 57
 >weight_kg_float = 57.0
 >
 >print weight_kg_int, 'is', type(weight_kg_int)
