@@ -263,7 +263,9 @@ doubledata:
 <p>will give you an array where <code>tripledata[0,0] = doubledata[0,0] + data[0,0]</code> and so on for all other elements of the arrays.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span> <span class="st">&#39;tripledata:&#39;</span>
 <span class="bu">print</span> tripledata[:<span class="dv">2</span>,<span class="dv">360</span>:]</code></pre></div>
-<p><sub>~</sub> {.output} tripledata: [[ 78.9 78.9 78.9 78.9 79.2][ 78.3 78.3 78.6 78.6 78.9]] ~~</p>
+<pre class="output"><code>tripledata:
+[[ 78.9  78.9  78.9  78.9  79.2]
+ [ 78.3  78.3  78.6  78.6  78.9]]</code></pre>
 <p>We can also perform statistical operations on arrays. If we want to find the average temperature on all days across all stations, for example, we can just ask the array for its mean value</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">print</span> data.mean()</code></pre></div>
 <pre class="output"><code>45.783767123</code></pre>

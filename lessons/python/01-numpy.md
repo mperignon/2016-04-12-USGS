@@ -456,7 +456,7 @@ print tripledata[:2,360:]
 tripledata:
 [[ 78.9  78.9  78.9  78.9  79.2]
  [ 78.3  78.3  78.6  78.6  78.9]]
-~~
+~~~
 
 We can also perform statistical operations on arrays.
 If we want to find the average temperature on all days across all stations,
